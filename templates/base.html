@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Cancer Risk Prediction</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container py-5">
+      <h2 class="text-center mb-4">🧬 Cancer Risk Prediction System</h2>
+      <div class="mb-3 text-center">
+        <a href="/" class="btn btn-outline-primary mx-2">Home</a>
+        <a href="/breast-cancer" class="btn btn-outline-danger mx-2"
+          >Breast Cancer</a
+        >
+        <a href="/cervical" class="btn btn-outline-warning mx-2"
+          >Cervical Cancer</a
+        >
+        <a href="/colorectal" class="btn btn-outline-success mx-2"
+          >Colorectal Cancer</a
+        >
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dashboard - Cancer Risk Prediction</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+          <i class="fas fa-heartbeat me-2"></i>Cancer Screening
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('history') }}">
+                <i class="fas fa-history me-1"></i>History
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-stethoscope me-1"></i>Predictions
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('breast') }}"
+                    >Breast Cancer</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('cervical') }}"
+                    >Cervical Cancer</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('colorectal') }}"
+                    >Colorectal Cancer</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user me-1"></i>{{ username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <h2 class="text-center mb-4">
+        <i class="fas fa-tachometer-alt me-2"></i>Welcome, {{ username }}!
+      </h2>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-female text-danger fa-3x"></i>
+              </div>
+              <h5 class="card-title">Breast Cancer</h5>
+              <p class="card-text">
+                Predict breast cancer risk based on tumor characteristics
+              </p>
+              <a href="{{ url_for('breast') }}" class="btn btn-danger">
+                <i class="fas fa-chart-line me-2"></i>Start Prediction
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-venus text-warning fa-3x"></i>
+              </div>
+              <h5 class="card-title">Cervical Cancer</h5>
+              <p class="card-text">
+                Assess cervical cancer risk based on medical history
+              </p>
+              <a href="{{ url_for('cervical') }}" class="btn btn-warning">
+                <i class="fas fa-chart-line me-2"></i>Start Prediction
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-user-md text-success fa-3x"></i>
+              </div>
+              <h5 class="card-title">Colorectal Cancer</h5>
+              <p class="card-text">
+                Evaluate colorectal cancer risk using age and BMI
+              </p>
+              <a href="{{ url_for('colorectal') }}" class="btn btn-success">
+                <i class="fas fa-chart-line me-2"></i>Start Prediction
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if recent_predictions is defined and not recent_predictions.empty %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-clock me-2"></i>Recent Predictions
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Probability</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for _, prediction in recent_predictions.iterrows() %}
+                <tr>
+                  <td>
+                    <span class="badge bg-secondary"
+                      >{{ prediction.prediction_type }}</span
+                    >
+                  </td>
+                  <td>{{ prediction.date }}</td>
+                  <td>{{ prediction.time }}</td>
+                  <td>{{ '{:.2%}'.format(prediction.probability) }}</td>
+                  <td>
+                    <span
+                      class="badge bg-{{ 'danger' if prediction.result == 'High Risk' else 'success' }}"
+                    >
+                      {{ prediction.result }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center mt-3">
+            <a href="{{ url_for('history') }}" class="btn btn-outline-primary">
+              <i class="fas fa-history me-2"></i>View All History
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card">
+        <div class="card-body text-center">
+          <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+          <h5>No predictions yet</h5>
+          <p class="text-muted">
+            Start by selecting a cancer type above to make your first
+            prediction.
+          </p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block content %}
+<h4>Colorectal Cancer Risk Inputs</h4>
+<form method="post">
+  <div class="mb-2">
+    <label>Age</label>
+    <input type="number" step="1" name="Age" class="form-control" required />
+  </div>
+  <div class="mb-2">
+    <label>BMI</label>
+    <input type="number" step="0.1" name="BMI" class="form-control" required />
+  </div>
+  <button class="btn btn-success mt-2">Predict</button>
+</form>
+{% if prob is not none %}
+<div class="alert alert-info mt-4">
+  Colorectal Risk Probability: <strong>{{ '{:.2f}'.format(prob) }}</strong>
+</div>
+{% endif %} {% endblock %}

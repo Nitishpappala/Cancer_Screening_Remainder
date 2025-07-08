@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+<h4>Cervical Cancer Risk Inputs</h4>
+<form method="post">
+  {% for name in ["Age", "Number_of_sexual_partners",
+  "First_sexual_intercourse", "STDs_HPV", "Dx_HPV", "STDs",
+  "STDs_Number_of_diagnosis", "STDs_Time_since_last_diagnosis"] %}
+  <div class="mb-2">
+    <label>{{ name.replace("_", " ").replace("HPV", "HPV").title() }}</label>
+    <input
+      type="number"
+      step="any"
+      name="{{ name }}"
+      class="form-control"
+      required
+    />
+  </div>
+  {% endfor %}
+  <button class="btn btn-warning mt-2">Predict</button>
+</form>
+{% if prob is not none %}
+<div class="alert alert-info mt-4">
+  Biopsy Probability: <strong>{{ '{:.2f}'.format(prob) }}</strong>
+</div>
+{% endif %} {% endblock %}
